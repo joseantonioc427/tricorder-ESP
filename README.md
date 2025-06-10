@@ -1,5 +1,7 @@
-# Tricorder ESP32-S3
+# Tricorder ESP32-S3 N16R8
+POR JAC R2-D2
 
+README ACTUALIZADO
 Proyecto completo para construir un **Tricorder** con ESP32-S3, pantalla TFT, audio y 5 botones, inspirado en la tecnología de Star Trek.  
 Incluye animaciones GIF, sonidos, y manejo de archivos en SPIFFS.  
 Ideal para makers, fans de la ciencia ficción y aprendizaje de electrónica avanzada con ESP32.

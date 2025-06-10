@@ -1,0 +1,196 @@
+===============================================================================
+              PROYECTO TRICORDER ESP32-S3 + TFT + 5 BOTONES + AUDIO
+===============================================================================
+
+Este documento te guía paso a paso para montar, programar y usar tu proyecto
+Tricorder con ESP32-S3, pantalla TFT ST7735S, 5 botones y audio con MAX98357A.
+
+-------------------------------------------------------------------------------
+ÍNDICE
+-------------------------------------------------------------------------------
+1. Materiales necesarios
+2. Esquema de conexiones
+3. Instalación de librerías y herramientas
+4. Preparar archivos GIF y WAV
+5. Estructura de carpetas y archivos
+6. Cargar datos a SPIFFS
+7. Cargar el programa al ESP32-S3
+8. Funcionamiento y uso
+9. Consejos y recursos
+
+-------------------------------------------------------------------------------
+1. MATERIALES NECESARIOS
+-------------------------------------------------------------------------------
+- 1 x ESP32-S3 DevKit o compatible
+- 1 x Pantalla TFT 1.8" ST7735S (SPI, 7 pines)
+- 1 x Módulo amplificador digital MAX98357A
+- 1 x Altavoz pequeño (8Ω, 1W aprox.)
+- 5 x Botones pulsadores
+- Cables de conexión (jumpers)
+- Protoboard o placa de pruebas (opcional)
+- PC con Arduino IDE
+
+-------------------------------------------------------------------------------
+2. ESQUEMA DE CONEXIONES
+-------------------------------------------------------------------------------
+
+PANTALLA TFT ST7735S:
+----------------------
+   TFT        ESP32-S3 (GPIO)
+-------------------------------
+   VCC   -->   3V3
+   GND   -->   GND
+   SCL   -->   18
+   SDA   -->   23
+   DC    -->   5
+   RST   -->   4
+   CS    -->   15
+
+BOTONES:
+---------
+- Un pin de cada botón a GND
+- El otro pin a:
+  - Botón 1: 12
+  - Botón 2: 13
+  - Botón 3: 14
+  - Botón 4: 16
+  - Botón 5: 17
+
+AMPLIFICADOR MAX98357A:
+------------------------
+   MAX98357A   ESP32-S3 (GPIO)
+-------------------------------
+   VCC      -->   3V3
+   GND      -->   GND
+   LRCK     -->   25
+   BCLK     -->   26
+   DIN      -->   22
+   SD       -->   Sin conectar (o a GND)
+   GAIN     -->   Sin conectar
+
+ALTAVOZ:
+---------
+- Conecta el altavoz a los pines de salida del MAX98357A
+
+-------------------------------------------------------------------------------
+3. INSTALACIÓN DE LIBRERÍAS Y HERRAMIENTAS
+-------------------------------------------------------------------------------
+
+A) LIBRERÍAS EN ARDUINO IDE:
+  - Abre Arduino IDE
+  - Ve a Herramientas > Administrar bibliotecas...
+  - Busca e instala:
+    - "TFT_eSPI"
+    - "AnimatedGIF"
+    - "ESP32-audioI2S"
+
+B) CONFIGURAR TFT_eSPI:
+  - Abre el archivo User_Setup.h de TFT_eSPI (en Documents/Arduino/libraries/TFT_eSPI/)
+  - Asegúrate de tener:
+    #define ST7735_DRIVER
+    #define TFT_WIDTH  128
+    #define TFT_HEIGHT 160
+    #define TFT_MOSI 23
+    #define TFT_SCLK 18
+    #define TFT_CS   15
+    #define TFT_DC   5
+    #define TFT_RST  4
+    #define LOAD_GLCD
+    #define LOAD_FONT2
+    #define LOAD_FONT4
+    #define LOAD_GFXFF
+    #define SPI_FREQUENCY  27000000
+
+C) HERRAMIENTA PARA SUBIR ARCHIVOS A SPIFFS:
+  - Instala el plugin "ESP32 Sketch Data Upload":
+    https://github.com/me-no-dev/arduino-esp32fs-plugin
+  - Guía paso a paso:
+    https://randomnerdtutorials.com/esp32-esp8266-arduino-ide-file-upload/
+
+-------------------------------------------------------------------------------
+4. PREPARAR ARCHIVOS GIF Y WAV
+-------------------------------------------------------------------------------
+
+- Prepara tus animaciones (GIF) y sonidos (WAV).
+- Recomendaciones:
+  - GIF máximo 128x160 px, formato color indexado.
+  - WAV PCM 8/16 bits, mono, entre 8kHz y 44kHz.
+- Nómbralos exactamente así y ponlos en la carpeta data/:
+
+  group1_1.gif   group1_1.wav
+  group1_2.gif   group1_2.wav
+  group1_3.gif   group1_3.wav
+  group2_1.gif   group2_1.wav
+  group2_2.gif   group2_2.wav
+  group2_3.gif   group2_3.wav
+  alarm.gif      alarm.wav
+
+-------------------------------------------------------------------------------
+5. ESTRUCTURA DE CARPETAS Y ARCHIVOS
+-------------------------------------------------------------------------------
+tricorder_esp32s3/
+├── tricorder_esp32s3.ino
+├── README.md
+├── Fritzing_Conexiones.txt
+├── conexiones.png
+└── data/
+    ├── group1_1.gif
+    ├── group1_1.wav
+    ├── group1_2.gif
+    ├── group1_2.wav
+    ├── group1_3.gif
+    ├── group1_3.wav
+    ├── group2_1.gif
+    ├── group2_1.wav
+    ├── group2_2.gif
+    ├── group2_2.wav
+    ├── group2_3.gif
+    ├── group2_3.wav
+    ├── alarm.gif
+    └── alarm.wav
+
+-------------------------------------------------------------------------------
+6. CARGAR DATOS A SPIFFS
+-------------------------------------------------------------------------------
+1. Pon tus archivos .gif y .wav en la carpeta data/.
+2. En Arduino IDE, selecciona tu placa ESP32-S3.
+3. Ve al menú "Herramientas" y busca "ESP32 Sketch Data Upload".
+4. Haz clic para subir los archivos a la memoria SPIFFS.
+   (Si no aparece la opción, revisa que el plugin esté bien instalado).
+
+-------------------------------------------------------------------------------
+7. CARGAR EL PROGRAMA AL ESP32-S3
+-------------------------------------------------------------------------------
+1. Abre el archivo tricorder_esp32s3.ino en Arduino IDE.
+2. Conecta la ESP32-S3 al PC.
+3. Selecciona el puerto y modelo correcto.
+4. Sube el programa.
+5. Abre el monitor serie si quieres ver mensajes de depuración.
+
+-------------------------------------------------------------------------------
+8. FUNCIONAMIENTO Y USO
+-------------------------------------------------------------------------------
+- Al encender, la pantalla mostrará "¡Listo! Grupo 1".
+- Botón 1: Reproduce animación y sonido 1 del grupo activo.
+- Botón 2: Reproduce animación y sonido 2 del grupo activo.
+- Botón 3: Reproduce animación y sonido 3 del grupo activo.
+- Botón 4: Cambia entre grupo 1 y grupo 2 (pantalla muestra el grupo activo).
+- Botón 5: Reproduce animación y sonido de alarma (siempre el mismo).
+
+-------------------------------------------------------------------------------
+9. CONSEJOS Y RECURSOS
+-------------------------------------------------------------------------------
+- Puedes cambiar los GIF/WAV tantas veces como quieras, solo vuelve a subir la carpeta data/ usando "ESP32 Sketch Data Upload".
+- Si el sonido es bajo, revisa la conexión al MAX98357A o usa un altavoz de 8Ω/1W.
+- Si la pantalla no muestra nada, revisa los pines y la configuración del archivo User_Setup.h.
+- Para más información sobre los módulos:
+  - MAX98357A: https://datasheets.maximintegrated.com/en/ds/MAX98357A-MAX98357B.pdf
+  - ST7735S: https://cdn-shop.adafruit.com/datasheets/ST7735R_V0.2.pdf
+- Guía para convertir sonidos: https://audio.online-convert.com/es/convertir-a-wav
+
+IMAGEN DE CONEXIONES (descárgala):
+https://i.imgur.com/WZ7zF2l.png
+
+-------------------------------------------------------------------------------
+Fin del documento
+===============================================================================

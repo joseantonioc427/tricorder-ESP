@@ -1,0 +1,39 @@
+=== PROYECTO TRICORDER ESP32-S3 ===
+
+PANTALLA TFT 1.8" ST7735S (7 pines a ESP32-S3)
+-----------------------------------------------
+VCC   -> 3V3
+GND   -> GND
+SCL   -> GPIO18 (SCK)
+SDA   -> GPIO23 (MOSI)
+DC    -> GPIO5
+RST   -> GPIO4
+CS    -> GPIO15
+
+BOTONES (un extremo a GND, el otro a GPIO)
+------------------------------------------
+Botón 1: GPIO12
+Botón 2: GPIO13
+Botón 3: GPIO14
+Botón 4: GPIO16
+Botón 5: GPIO17
+
+AMPLIFICADOR I2S MAX98357A
+--------------------------
+VCC   -> 3V3 (NO 5V)
+GND   -> GND
+LRCK  -> GPIO25 (WS)
+BCLK  -> GPIO26 (BCLK)
+DIN   -> GPIO22 (DOUT)
+SD    -> (dejar sin conectar o a GND)
+GAIN  -> (opcional, a GND/3V3 según volumen, o dejar flotando)
+
+SALIDA -> Altavoz 8Ω/1W aprox. (conecta a los dos pines de salida del MAX98357A)
+
+--- SUGERENCIAS FRITZING ---
+- Usa el ESP32-S3 DevKit o similar de la lista de partes.
+- Busca "ST7735" para la pantalla (puedes usar TFT genérica si no aparece).
+- Botones: "pushbutton" estándar.
+- MAX98357A: Si no lo encuentras, usa un módulo "amplificador i2s" genérico.
+- Altavoz: "speaker" o "buzzer".
+- Respeta los colores de cables: rojo (+), negro (GND), otros para señales.
